@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { FaApple, FaBox, FaDollarSign, FaMonero, FaProductHunt, FaTable } from "react-icons/fa";
+import { FaDollarSign, FaProductHunt } from "react-icons/fa";
 
 export default function NaviBar() {
   return (
