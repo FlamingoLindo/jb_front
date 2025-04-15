@@ -20,7 +20,7 @@ export default function NaviBar() {
         borderRadius: "0 10px 10px 0", 
       }}
     >
-      <div style={{ marginBottom: "2rem" }}>
+      <div style={{ marginBottom: "2rem", textAlign: "center", fontSize: "2rem", textShadow: "1px 1px 10px #000" }}>
         <h2>JB</h2>
       </div>
 

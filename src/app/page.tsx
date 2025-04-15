@@ -1,28 +1,33 @@
-import Marcas from "@/Components/Marcas"; 
+// src/app/page.tsx
+import Marcas from "@/Components/Marcas";
+import { getBrands } from "@/services/api";
+import Link from "next/link";
 
-export default function Home() {
-  const marcas = [
-    {
-      name: "Gerdau",
-      logo: "/eu.jpg",
-      url: "/marca1",
-    },
-    {
-      name: "BOSCH",
-      logo: "/eu.jpg",
-      url: "/marca2",
-    },
-    {
-      name: "Makita",
-      logo: "/eu.jpg",
-      url: "/marca3",
-    },
-  ];
+type Brand = {
+  id: number;
+  name: string;
+  logo: string;
+};
+
+export default async function Home() {
+  let brands: Brand[] = [];
+
+  try {
+    brands = await getBrands();
+  } catch (error) {
+    console.error("Error fetching brands:", error);
+  }
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Marcas</h1>
-      <Marcas marcas={marcas} />
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Marcas</h1>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          + Adicionar marca
+        </button>
+      </div>
+
+      <Marcas marcas={brands} />
     </div>
   );
 }
