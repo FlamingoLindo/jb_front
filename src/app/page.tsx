@@ -1,7 +1,5 @@
-// src/app/page.tsx
 import Marcas from "@/Components/Marcas";
 import { getBrands } from "@/services/api";
-import Link from "next/link";
 
 type Brand = {
   id: number;
