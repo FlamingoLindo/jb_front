@@ -18,7 +18,7 @@ export default function NaviBar() {
             className="flex items-center p-2 rounded-md hover:bg-gray-200 transition"
           >
             <FaProductHunt className="mr-2" />
-            <span>Produtos</span>
+            <span>Marcas</span>
           </Link>
         </li>
 
