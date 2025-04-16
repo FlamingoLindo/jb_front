@@ -27,9 +27,9 @@ export default function Login() {
         </div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 bg-white bg-opacity-80 p-8 rounded-xl shadow-md"
+          className="flex flex-col gap-4 bg-white bg-opacity-80 p-8 rounded-xl shadow-2xl w-auto"
         >
-          <div className="flex flex-col">
+          <div className="flex flex-col w-xs">
             <label htmlFor="email" className="mb-1 font-semibold text-sm">
               E-mail
             </label>
@@ -55,7 +55,7 @@ export default function Login() {
           </div>
           <div className="flex items-center gap-2">
             <input type="checkbox" id="rememberMe" name="rememberMe" />
-            <label htmlFor="rememberMe">Manter Conectado</label>
+            <label htmlFor="rememberMe">Manter conectado</label>
           </div>
           <button
             type="submit"
