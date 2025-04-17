@@ -2,12 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL; 
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const api = axios.create({ baseURL: API_BASE_URL });
 
 api.interceptors.request.use(
   (config) => {
@@ -33,9 +28,14 @@ export const getBrands = async () => {
   return response.data;
 };
 
-export const createBrand = async (brandData: { name: string; logo: string }) => {
-  const response = await api.post("create_brand/", brandData);
+export const getBrand = async (id: number | string) => {
+  const response = await api.get(`get_product_by_brand/${id}/`);
   return response.data;
+};
+
+export const createBrand = async (data: FormData) => {
+  const res = await api.post("create_brand/", data);
+  return res.data;
 };
 
 export const updateBrand = async (id: number, brandData: Partial<{ name: string; logo: string }>) => {

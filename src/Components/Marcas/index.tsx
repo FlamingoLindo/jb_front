@@ -12,22 +12,23 @@ type Brand = {
 export default function Marcas({ marcas }: { marcas: Brand[] }) {
   return (
     <div className="mt-4 flex flex-wrap gap-4">
-      {marcas.map((marca, index) => (
-        <Link href={`/brands/${marca.id}`} key={index}>
-          <div
-            key={marca.id}
-            className="w-40 flex flex-col items-center cursor-pointer hover:scale-105 transition-transform">
-            <Image
-              src={`${API_BASE_URL}${marca.logo}`}
-              alt={marca.name}
-              width={100}
-              height={60}
-              className="object-fill w-full h-32 rounded-lg"
-            />
-            <p className="text-lg text-center">{marca.name}</p>
+      {marcas.map(marca => (
+        <Link href={`brands/${marca.id}`} key={marca.id}>
+          <div className="w-40 flex flex-col items-center hover:scale-105 transition">
+            <div className="relative w-full aspect-square">
+              <Image
+                src={`${API_BASE_URL}${marca.logo}`}
+                alt={marca.name}
+                fill                
+                sizes="100%"
+                className="object-cover rounded-lg"
+              />
+            </div>
+            <p className="mt-2 text-lg text-center">{marca.name}</p>
           </div>
         </Link>
       ))}
     </div>
   );
 }
+

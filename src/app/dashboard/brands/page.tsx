@@ -1,30 +1,28 @@
 import Marcas from "@/Components/Marcas";
 import { getBrands } from "@/services/api";
+import AddBrandButton from "@/Components/AddBrandButton";
 
-type Brand = {
-  id: number;
-  name: string;
-  logo: string;
-};
 
 export default async function Home() {
-  let brands: Brand[] = [];
-
+  let brands = [];
   try {
     brands = await getBrands();
-  } catch (error) {
-    console.error("Error fetching brands:", error);
+  } catch (e) {
+    console.error("Error fetching brands:", e);
   }
 
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Marcas</h1>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          + Adicionar marca
-        </button>
+
+        <div className="flex gap-2">
+          
+          <AddBrandButton />
+        </div>
+
       </div>
-        
+
       <Marcas marcas={brands} />
     </div>
   );
