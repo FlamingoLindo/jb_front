@@ -1,9 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // allow both localhost and your LAN IP in dev
+  allowedDevOrigins: [
+    'localhost',
+    '192.168.0.17',
+  ],
+
   images: {
-    domains: ["localhost"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+        pathname: "/Images/Brands/**",
+      },
+    ],
   },
 };
 
