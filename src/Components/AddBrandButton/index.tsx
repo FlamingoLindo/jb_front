@@ -81,7 +81,7 @@ export default function AddBrandButton() {
                 className="w-full border px-3 py-2 rounded mb-4"
               />
 
-              <div className="flex justify-center gap-3">
+              <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setOpen(false)}
                   className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"

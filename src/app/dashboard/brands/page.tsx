@@ -1,12 +1,13 @@
 'use client';
 
-import Marcas from "@/Components/Marcas";
 import { getBrands } from "@/services/api";
+import { useState } from "react";
+import { useEffect } from "react";
+
 import AddBrandButton from "@/Components/AddBrandButton";
 import EnableEditButton from "@/Components/EnableEditButton";
-import { useState } from "react";
+import Marcas from "@/Components/Marcas";
 
-import { useEffect } from "react";
 
 export default function Home() {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -24,6 +25,8 @@ export default function Home() {
 
     fetchBrands();
   }, []);
+
+  
 
   return (
     <div className="p-4">
