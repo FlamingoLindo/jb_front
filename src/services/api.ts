@@ -2,6 +2,12 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL; 
 
+export interface Brand {
+  id: number;
+  name: string;
+  logo: string;
+}
+
 const api = axios.create({ baseURL: API_BASE_URL });
 
 api.interceptors.request.use(
@@ -12,7 +18,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 api.interceptors.response.use(
   (response) => {
     return response;
@@ -38,8 +43,17 @@ export const createBrand = async (data: FormData) => {
   return res.data;
 };
 
-export const updateBrand = async (id: number, brandData: Partial<{ name: string; logo: string }>) => {
-  const response = await api.put(`manage_brand/${id}/`, brandData);
+export const updateBrand = async (
+  id: number,
+  data: FormData
+): Promise<Brand> => {
+  const response = await api.put(
+    `manage_brand/${id}/`,
+    data,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }
+  );
   return response.data;
 };
 

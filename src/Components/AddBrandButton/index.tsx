@@ -1,26 +1,23 @@
 "use client";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { createPortal } from "react-dom";
 import { createBrand } from "@/services/api";
-import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
-export default function AddBrandButton() {
+interface AddBrandButtonProps {
+  onAdded?: () => void;
+}
+
+export default function AddBrandButton({ onAdded }: AddBrandButtonProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
-  /* close on Esc */
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  /* handle submit */
   const onSave = async () => {
-    if (!name.trim() || !file) return alert("Preencha nome e logo");
+    if (!name.trim() || !file) {
+      return toast.error("Preencha nome e logo");
+    }
 
     const data = new FormData();
     data.append("name", name);
@@ -29,13 +26,18 @@ export default function AddBrandButton() {
     try {
       setLoading(true);
       await createBrand(data);
+
+      // close & clear
       setOpen(false);
       setName("");
       setFile(null);
-      router.refresh();
+
+      // let the parent refetch
+      onAdded?.();
+      toast.success("Marca adicionada com sucesso!");
     } catch (err) {
       console.error(err);
-      alert("Erro ao criar marca");
+      toast.error("Erro ao criar marca");
     } finally {
       setLoading(false);
     }
@@ -58,21 +60,24 @@ export default function AddBrandButton() {
           >
             <div
               className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl"
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-xl font-semibold mb-4">Adicionar marca</h2>
 
-              {/* nome */}
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Nome da marca
+              </label>
               <input
                 type="text"
                 placeholder="Nome da marca"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full border px-3 py-2 rounded mb-4"
-                
               />
 
-              {/* logo */}
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                Logo
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -80,7 +85,6 @@ export default function AddBrandButton() {
                   setFile(e.target.files?.[0] || null)
                 }
                 className="w-full border px-3 py-2 rounded mb-4"
-                required
               />
 
               <div className="flex justify-end gap-2">

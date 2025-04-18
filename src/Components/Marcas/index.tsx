@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
+import { Trash2, Pencil, FileInput } from "lucide-react";
+import { createPortal } from "react-dom";
+import { toast } from "react-hot-toast";
+
+import { deleteBrand, updateBrand } from "@/services/api";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, Pencil } from "lucide-react";
-import { createPortal } from "react-dom";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_API_URL;
 
@@ -17,28 +21,83 @@ type Brand = {
 interface MarcasProps {
   marcas: Brand[];
   isEditMode: boolean;
+  onDeleted?: (id: number) => void;
+  onEdited?: () => void;
 }
 
-export default function Marcas({ marcas, isEditMode }: MarcasProps) {
+
+export default function Marcas({ marcas, isEditMode, onDeleted, onEdited }: MarcasProps) {
   const [deleting, setDeleting] = useState<Brand | null>(null);
   const [editing, setEditing] = useState<Brand | null>(null);
+  const [name, setName] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (editing) {
+      setName(editing.name);
+      setFile(null);
+      setPreviewUrl(`${API_BASE_URL}${editing.logo}`);
+    }
+  }, [editing]);
 
   const confirmDelete = async () => {
-    if (!deleting) return;
+    if (!deleting) return toast.error("Marca não encontrada");
     try {
-      console.log("deleted", deleting.id);
-    } finally {
+      setLoading(true);
+      await deleteBrand(deleting.id);
       setDeleting(null);
+      onDeleted?.(deleting.id);
+      toast.success("Marca deletada com sucesso!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao apagar marca");
+    } finally {
+      setLoading(false);
     }
   };
 
   const confirmEdit = async () => {
-    if (!editing) return;
-    try {
-      console.log("edited", editing.id);
-    } finally {
-      setEditing(null);
+    if (!name.trim()) {
+      return toast.error("Preencha um nome válido");
     }
+  
+    // prepare form‑data
+    const formData = new FormData();
+    formData.append("name", name);
+    if (file) {
+      formData.append("logo", file);
+    }
+  
+    try {
+      setLoading(true);
+  
+      // ← pass both the id and the formData!
+      await updateBrand(editing!.id, formData);
+  
+      // clear & close modal
+      setEditing(null);
+      setName("");
+      setFile(null);
+      setPreviewUrl("");
+  
+      // tell parent to refetch
+      onEdited?.();
+  
+      toast.success("Marca atualizada com sucesso!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao atualizar marca");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] || null;
+    setFile(f);
+    if (f) setPreviewUrl(URL.createObjectURL(f));
   };
 
   return (
@@ -61,7 +120,6 @@ export default function Marcas({ marcas, isEditMode }: MarcasProps) {
               </div>
               <p className="mt-2 text-lg text-center">{marca.name}</p>
             </Link>
-
             {isEditMode && (
               <div className="flex gap-2 mt-2">
                 <Trash2
@@ -90,8 +148,7 @@ export default function Marcas({ marcas, isEditMode }: MarcasProps) {
             >
               <h2 className="text-lg font-bold mb-4">Deletar marca</h2>
               <p className="mb-4">
-                Você tem certeza que deseja deletar a marca{" "}
-                <strong>{deleting.name}</strong>?
+                Você tem certeza que deseja deletar a marca <strong>{deleting.name}</strong>?
               </p>
               <div className="flex justify-end gap-2">
                 <button
@@ -103,8 +160,9 @@ export default function Marcas({ marcas, isEditMode }: MarcasProps) {
                 <button
                   className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
                   onClick={confirmDelete}
+                  disabled={loading}
                 >
-                  Deletar
+                  {loading ? "Deletando..." : "Deletar"}
                 </button>
               </div>
             </div>
@@ -124,36 +182,58 @@ export default function Marcas({ marcas, isEditMode }: MarcasProps) {
             >
               <h2 className="text-lg font-bold mb-4">Editar marca</h2>
               <p className="mb-4">
-                Você está editando a marca{" "}
-                <strong>{editing.name}</strong>:
+                Você está editando a marca <strong>{editing.name}</strong>:
               </p>
-
-              <form 
-                onSubmit={(e) => {e.preventDefault(); confirmEdit()}}>
+              <form onSubmit={(e) => { e.preventDefault(); confirmEdit(); }}>
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+                  Nome da marca
+                </label>
                 <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder="Nome da marca"
                   className="w-full border px-3 py-2 rounded mb-4"
                   required
                 />
-
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="w-full border px-3 py-2 rounded mb-4"
-                  required
-                />
-
+                <label className="block mb-2 text-sm font-medium text-gray-700">
+                  Logo
+                </label>
+                {previewUrl && (
+                  <div className="relative w-48 aspect-square justify-center mb-4">
+                    <Image
+                      src={previewUrl}
+                      alt={`Preview de ${editing.name}`}
+                      fill
+                      sizes="100%"
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                )}
+                <label
+                  htmlFor="logo-upload"
+                  className="flex items-center gap-2 mb-4 cursor-pointer text-gray-700 hover:text-gray-900"
+                >
+                  <FileInput /> Alterar logo
+                  <input
+                    id="logo-upload"
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleFileChange}
+                  />
+                </label>
                 <div className="flex justify-end gap-2">
                   <button
+                    type="button"
                     className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
                     onClick={() => setEditing(null)}
                   >
                     Cancelar
                   </button>
                   <button
+                    type="submit"
                     className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
-                    onSubmit={confirmEdit}
                   >
                     Confirmar
                   </button>
