@@ -69,6 +69,7 @@ export default function AddBrandButton() {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 className="w-full border px-3 py-2 rounded mb-4"
+                
               />
 
               {/* logo */}
@@ -79,6 +80,7 @@ export default function AddBrandButton() {
                   setFile(e.target.files?.[0] || null)
                 }
                 className="w-full border px-3 py-2 rounded mb-4"
+                required
               />
 
               <div className="flex justify-end gap-2">
