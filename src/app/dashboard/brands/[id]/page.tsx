@@ -1,77 +1,47 @@
-import { getBrand } from "@/services/api";
-import Image from "next/image";
+'use client';
 
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'next/navigation';      // <-- for app-dir dynamic segments
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+import { ArrowLeft } from 'lucide-react';
 
-type Product = {
-  id: number;
-  code: number;
-  name: string;
-  description: string;
-  price: string;
-  original_price: string;
-  image: string;
-};
+import Products from '@/Components/Products';
+import { getProductsByBrand, type Product } from '@/services/api';
 
-export default async function BrandPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const { brand, products } = await getBrand(id);
+export default function BrandPage() {
+  const { id } = useParams<{ id: string }>();     // grabs the [id] from the URL
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const fetchProducts = useCallback(async () => {
+    if (!id) return;                              // wait until id is defined
+    try {
+      const data = await getProductsByBrand(id);
+      setProducts(data);
+    } catch (err: unknown) {
+      console.error(err);
+      toast.error('Erro ao carregar produtos.');
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   return (
     <div className="p-6">
       <div className="flex items-center gap-2 mb-6">
-        <Link href="../brands" className="p-1 rounded">
+        <Link href="/brands" className="p-1 rounded">
           <ArrowLeft className="h-5 w-5" />
           <span className="sr-only">Voltar</span>
         </Link>
 
-        <h1 className="text-3xl font-bold">{brand.name}</h1>
+        <h1 className="text-3xl font-bold">
+          Produtos da Marca {id}
+        </h1>
       </div>
 
-      {products.length === 0 ? (
-        <p className="flex items-center justify-center text-center font-extrabold">Não há produtos cadastrados</p>
-      ) : (
-        <div className="flex flex-wrap gap-4">
-          {products.map((product: Product) => (
-            <div
-              key={product.id}
-              className="w-40 flex flex-col items-center hover:scale-105 transition"
-            >
-              <h2 className="text-center text-base font-semibold mb-1">
-                {product.name}
-              </h2>
-
-              <div className="relative w-full aspect-square">
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${product.image}`}
-                  alt={product.name}
-                  fill
-                  sizes="100%"
-                  className="object-cover rounded-lg"
-                  priority
-                />
-              </div>
-
-              <div className="mt-2 text-center space-y-1">
-                <p className="text-xs bg-yellow-300 inline-block px-1 rounded">
-                  {product.code}
-                </p>
-                <p className="text-xs text-red-500 truncate">
-                  {product.description}
-                </p>
-                <p className="font-medium bg-yellow-300 inline-block px-1 rounded">
-                  R$ {product.price}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <Products products={products} />
     </div>
   );
 }

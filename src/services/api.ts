@@ -1,12 +1,22 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL; 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export interface Brand {
   id: number;
   name: string;
   logo: string;
 }
+
+export interface Product {
+  id: number;
+  code: number;
+  name: string;
+  description: string;
+  price: string;
+  original_price: string;
+  image: string;
+};
 
 const api = axios.create({ baseURL: API_BASE_URL });
 
@@ -33,9 +43,11 @@ export const getBrands = async () => {
   return response.data;
 };
 
-export const getBrand = async (id: number | string) => {
-  const response = await api.get(`get_product_by_brand/${id}/`);
-  return response.data;
+export const getProductsByBrand = async (
+  id: number | string
+): Promise<Product[]> => {
+  const { data } = await api.get(`/get_product_by_brand/${id}/`);
+  return data.products;    // ← only the array
 };
 
 export const createBrand = async (data: FormData) => {
