@@ -43,6 +43,11 @@ export const getBrands = async () => {
   return response.data;
 };
 
+export const getBrandById = async (id: string): Promise<Brand> => {
+  const response = await api.get(`get_brand_by_id/${id}/`);
+  return response.data;
+};
+
 export const getProductsByBrand = async (
   id: number | string
 ): Promise<Product[]> => {
@@ -72,6 +77,11 @@ export const updateBrand = async (
 export const deleteBrand = async (id: number) => {
   const response = await api.delete(`manage_brand/${id}/`);
   return response.data;
+};
+
+export const createProduct = async (data: FormData) => {
+  const res = await api.post("create_product/", data);
+  return res.data;
 };
 
 export default api;

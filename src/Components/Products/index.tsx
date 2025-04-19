@@ -1,5 +1,4 @@
 import Image from "next/image";
-// import { getBrand } from "@/services/api"; // if you actually use this in this file
 
 type Product = {
   id: number;
@@ -49,7 +48,7 @@ export default function Products({ products }: ProductsProps) {
               R$ {product.price}
             </p>
             {product.original_price !== product.price && (
-              <p className="text-xs text-gray-400 line-through font-light">
+              <p className="text-sm line-through font-light">
                 R$ {product.original_price}
               </p>
             )}
