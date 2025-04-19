@@ -10,6 +10,8 @@ import Products from '@/Components/Products';
 import { getProductsByBrand, getBrandById, type Product, type Brand } from '@/services/api';
 import AddProductButton from '@/Components/AddProductButton';
 import EnableEditButton from '@/Components/EnableEditButton';
+import ReajustButton from '@/Components/ReajustButton';
+import RestoreButton from '@/Components/RestoreButton';
 
 export default function BrandPage() {
   const { id } = useParams<{ id: string }>();
@@ -50,6 +52,14 @@ export default function BrandPage() {
         </h1>
 
         <div className="ml-auto flex gap-2">
+          <ReajustButton
+            brandId={Number(id)}
+            onAdded={fetchProductsAndBrand}
+          />
+          <RestoreButton
+            brandId={Number(id)}
+            onAdded={fetchProductsAndBrand}
+          />
           <EnableEditButton
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}

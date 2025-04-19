@@ -96,4 +96,27 @@ export const updateProduct = async (id: number, data: FormData): Promise<Product
   return response.data;
 };
 
+export const reajustPrice = async (
+  brandId: number | string,
+  percent: number | string
+): Promise<Product[]> => {
+  const { data } = await api.put(
+    // note: match your Django URLconf, including the trailing slash if you use it
+    `reajust_price/${brandId}/${percent}/`
+  );
+  // your view returns Response(serializer.data) which is the array
+  return data as Product[];
+};
+
+export const restorePrice = async (
+  brandId: number | string,
+): Promise<Product[]> => {
+  const { data } = await api.put(
+    // note: match your Django URLconf, including the trailing slash if you use it
+    `restore_price/${brandId}/`
+  );
+  // your view returns Response(serializer.data) which is the array
+  return data as Product[];
+};
+
 export default api;
