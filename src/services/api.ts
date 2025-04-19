@@ -84,4 +84,16 @@ export const createProduct = async (data: FormData) => {
   return res.data;
 };
 
+export const deleteProduct = async (id: number) => {
+  const response = await api.delete(`manage_product/${id}/`);
+  return response.data;
+};
+
+export const updateProduct = async (id: number, data: FormData): Promise<Product> => {
+  const response = await api.put(`manage_product/${id}/`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+};
+
 export default api;

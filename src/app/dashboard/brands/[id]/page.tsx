@@ -9,11 +9,13 @@ import { ArrowLeft } from 'lucide-react';
 import Products from '@/Components/Products';
 import { getProductsByBrand, getBrandById, type Product, type Brand } from '@/services/api';
 import AddProductButton from '@/Components/AddProductButton';
+import EnableEditButton from '@/Components/EnableEditButton';
 
 export default function BrandPage() {
   const { id } = useParams<{ id: string }>();
   const [products, setProducts] = useState<Product[]>([]);
   const [brand, setBrand] = useState<Brand | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const fetchProductsAndBrand = useCallback(async () => {
     if (!id) return;
@@ -43,12 +45,15 @@ export default function BrandPage() {
           <span className="sr-only">Voltar</span>
         </Link>
 
-
         <h1 className="text-3xl font-bold">
           {brand ? `${brand.name}` : 'Carregando...'}
         </h1>
 
-        <div className='ml-auto'>
+        <div className="ml-auto flex gap-2">
+          <EnableEditButton
+            isEditMode={isEditMode}
+            setIsEditMode={setIsEditMode}
+          />
           <AddProductButton
             brandId={Number(id)}
             onAdded={fetchProductsAndBrand}
@@ -56,8 +61,17 @@ export default function BrandPage() {
         </div>
       </div>
 
-
-      <Products products={products} />
+      <Products
+        brandId={Number(id)}
+        products={products}
+        isEditMode={isEditMode}
+        onDeleted={(deletedId) =>
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== deletedId)
+          )
+        }
+        onEdited={fetchProductsAndBrand}
+      />
     </div>
   );
 }
