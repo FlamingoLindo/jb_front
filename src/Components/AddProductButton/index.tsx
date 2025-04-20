@@ -58,7 +58,7 @@ export default function AddProductButton({ onAdded, brandId }: AddBrandButtonPro
         <>
             <button
                 onClick={() => setOpen(true)}
-                className="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-blue-700 transition"
+                className="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-blue-700 transition cursor-pointer"
             >
                 + Adicionar produto
             </button>
@@ -134,14 +134,14 @@ export default function AddProductButton({ onAdded, brandId }: AddBrandButtonPro
                             <div className="flex justify-end gap-2">
                                 <button
                                     onClick={() => setOpen(false)}
-                                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     onClick={onSave}
                                     disabled={loading}
-                                    className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                                    className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 cursor-pointer"
                                 >
                                     {loading ? "Salvando..." : "Salvar"}
                                 </button>

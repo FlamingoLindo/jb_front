@@ -13,7 +13,7 @@ export default function EnableEditButton( {isEditMode, setIsEditMode} : EnableEd
   return (
     <>
       <button 
-        className="bg-lime-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-lime-700 transition"
+        className="bg-lime-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-lime-700 transition cursor-pointer"
         onClick={() => {
           setIsEditMode(!isEditMode);
           console.log("Edit mode:", !isEditMode);

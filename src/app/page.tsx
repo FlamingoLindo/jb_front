@@ -55,12 +55,12 @@ export default function Login() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <input type="checkbox" id="rememberMe" name="rememberMe" />
-            <label htmlFor="rememberMe">Manter conectado</label>
+            <input type="checkbox" id="rememberMe" name="rememberMe" className='cursor-pointer'/>
+            <label htmlFor="rememberMe" className='cursor-pointer'>Manter conectado</label>
           </div>
           <button
             type="submit"
-            className="bg-[#181e7e] text-white py-2 px-4 rounded-md hover:bg-blue-900 transition"
+            className="bg-[#181e7e] text-white py-2 px-4 rounded-md hover:bg-blue-900 transition cursor-pointer"
           >
             Entrar
           </button>

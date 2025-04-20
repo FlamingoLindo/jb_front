@@ -35,7 +35,7 @@ export default function RestoreButton({ onAdded, brandId }: AddBrandButtonProps)
         <>
             <button
                 onClick={() => setOpen(true)}
-                className="bg-white text-black font-medium px-4 py-2 rounded-xl shadow hover:bg-red-200 transition border-dashed border-2 border-red-600"
+                className="bg-white text-black font-medium px-4 py-2 rounded-xl shadow hover:bg-red-200 transition border-dashed border-2 border-red-600 cursor-pointer"
             >
                 Restaurar valores
             </button>
@@ -60,14 +60,14 @@ export default function RestoreButton({ onAdded, brandId }: AddBrandButtonProps)
                             <div className="flex justify-end gap-2">
                                 <button
                                     onClick={() => setOpen(false)}
-                                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     onClick={onSave}
                                     disabled={loading}
-                                    className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-60"
+                                    className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-60 cursor-pointer"
                                 >
                                     {loading ? "Salvando..." : "Restaurar"}
                                 </button>

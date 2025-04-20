@@ -167,13 +167,13 @@ export default function Products({
               </p>
               <div className="flex justify-end gap-2">
                 <button
-                  className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                  className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer"
                   onClick={() => setDeleting(null)}
                 >
                   Cancelar
                 </button>
                 <button
-                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 cursor-pointer"
                   onClick={confirmDelete}
                   disabled={loading}
                 >
@@ -258,9 +258,21 @@ export default function Products({
                   className="w-full border px-3 py-2 rounded mb-4"
                 />
 
-                <button className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">
-                  {loading ? "Salvando..." : "Salvar"}
-                </button>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 cursor-pointer"
+                    onClick={() => setEditing(null)}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 cursor-pointer"
+                  >
+                    Confirmar
+                  </button>
+                </div>
               </form>
             </div>
           </div>,
