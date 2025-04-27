@@ -119,4 +119,9 @@ export const restorePrice = async (
   return data as Product[];
 };
 
+export const login = async (data: FormData) => {
+  const res = await api.post("login/", data);
+  return res.data;
+};
+
 export default api;

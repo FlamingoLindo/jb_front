@@ -99,58 +99,66 @@ export default function Products({
   };
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="w-40 flex flex-col items-center hover:scale-105 transition"
-        >
-          <h2 className="text-center text-base font-semibold mb-1">
-            {product.name}
-          </h2>
+    <div className="flex flex-wrap gap-4 justify-center mt-4">
+      {products.length === 0 ? (
+        <p className="text-center text-gray-500 text-lg mt-10">
+          Nenhum produto encontrado.
+        </p>
+      ) : (
+        products.map((product) => (
+          <div
+            key={product.id}
+            className="w-40 flex flex-col items-center hover:scale-105 transition"
+          >
+            <h2 className="text-center text-base font-semibold mb-1">
+              {product.name}
+            </h2>
 
-          <div className="relative w-full aspect-square">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${product.image}`}
-              alt={product.name}
-              fill
-              sizes="100%"
-              className="object-cover rounded-lg"
-              priority
-            />
-          </div>
-
-          <div className="mt-2 text-center space-y-1">
-            <p className="text-xs bg-yellow-300 inline-block px-1 rounded">
-              {product.code}
-            </p>
-            <p className="text-xs text-red-500 truncate">
-              {product.description}
-            </p>
-            <p className="font-medium bg-yellow-300 inline-block px-1 rounded">
-              R$ {product.price}
-            </p>
-            {product.original_price !== product.price && (
-              <p className="text-sm line-through font-light">
-                R$ {product.original_price}
-              </p>
-            )}
-          </div>
-          {isEditMode && (
-            <div className="flex gap-2 mt-2">
-              <Trash2
-                className="cursor-pointer hover:text-red-600"
-                onClick={() => setDeleting(product)}
-              />
-              <Pencil
-                className="cursor-pointer hover:text-blue-600"
-                onClick={() => setEditing(product)}
+            <div className="relative w-full aspect-square">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_IMAGE_API_URL}${product.image}`}
+                alt={product.name}
+                fill
+                sizes="100%"
+                className="object-cover rounded-lg"
+                priority
               />
             </div>
-          )}
-        </div>
-      ))}
 
+            <div className="mt-2 text-center space-y-1">
+              <p className="text-xs bg-yellow-300 inline-block px-1 rounded">
+                {product.code}
+              </p>
+              <p className="text-xs text-red-500 truncate">
+                {product.description}
+              </p>
+              <p className="font-medium bg-yellow-300 inline-block px-1 rounded">
+                R$ {product.price}
+              </p>
+              {product.original_price !== product.price && (
+                <p className="text-sm line-through font-light">
+                  R$ {product.original_price}
+                </p>
+              )}
+            </div>
+
+            {isEditMode && (
+              <div className="flex gap-2 mt-2">
+                <Trash2
+                  className="cursor-pointer hover:text-red-600"
+                  onClick={() => setDeleting(product)}
+                />
+                <Pencil
+                  className="cursor-pointer hover:text-blue-600"
+                  onClick={() => setEditing(product)}
+                />
+              </div>
+            )}
+          </div>
+        ))
+      )}
+
+      {/* Portals for delete and edit modals (outside the product list) */}
       {deleting &&
         createPortal(
           <div
@@ -280,4 +288,4 @@ export default function Products({
         )}
     </div>
   );
-}
+}  

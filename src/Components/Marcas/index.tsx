@@ -62,29 +62,29 @@ export default function Marcas({ marcas, isEditMode, onDeleted, onEdited }: Marc
     if (!name.trim()) {
       return toast.error("Preencha um nome válido");
     }
-  
+
     // prepare form‑data
     const formData = new FormData();
     formData.append("name", name);
     if (file) {
       formData.append("logo", file);
     }
-  
+
     try {
       setLoading(true);
-  
+
       // ← pass both the id and the formData!
       await updateBrand(editing!.id, formData);
-  
+
       // clear & close modal
       setEditing(null);
       setName("");
       setFile(null);
       setPreviewUrl("");
-  
+
       // tell parent to refetch
       onEdited?.();
-  
+
       toast.success("Marca atualizada com sucesso!");
     } catch (err) {
       console.error(err);
@@ -102,40 +102,47 @@ export default function Marcas({ marcas, isEditMode, onDeleted, onEdited }: Marc
 
   return (
     <>
-      <div className="mt-4 flex flex-wrap gap-4">
-        {marcas.map((marca) => (
-          <div
-            key={marca.id}
-            className="w-40 flex flex-col items-center hover:scale-105 transition"
-          >
-            <Link href={`brands/${marca.id}`} className="w-full">
-              <div className="relative w-full aspect-square">
-                <Image
-                  src={`${API_BASE_URL}${marca.logo}`}
-                  alt={marca.name}
-                  fill
-                  sizes="100%"
-                  className="object-cover rounded-lg"
-                />
-              </div>
-              <p className="mt-2 text-lg text-center">{marca.name}</p>
-            </Link>
-            {isEditMode && (
-              <div className="flex gap-2 mt-2">
-                <Trash2
-                  className="cursor-pointer hover:text-red-600"
-                  onClick={() => setDeleting(marca)}
-                />
-                <Pencil
-                  className="cursor-pointer hover:text-blue-600"
-                  onClick={() => setEditing(marca)}
-                />
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="mt-4 flex flex-wrap gap-4 justify-center">
+        {marcas.length === 0 ? (
+          <p className="text-center text-gray-500 text-lg mt-10">
+            Nenhuma marca encontrada.
+          </p>
+        ) : (
+          marcas.map((marca) => (
+            <div
+              key={marca.id}
+              className="w-40 flex flex-col items-center hover:scale-105 transition"
+            >
+              <Link href={`brands/${marca.id}`} className="w-full">
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src={`${API_BASE_URL}${marca.logo}`}
+                    alt={marca.name}
+                    fill
+                    sizes="100%"
+                    className="object-cover rounded-lg"
+                  />
+                </div>
+                <p className="mt-2 text-lg text-center">{marca.name}</p>
+              </Link>
+              {isEditMode && (
+                <div className="flex gap-2 mt-2">
+                  <Trash2
+                    className="cursor-pointer hover:text-red-600"
+                    onClick={() => setDeleting(marca)}
+                  />
+                  <Pencil
+                    className="cursor-pointer hover:text-blue-600"
+                    onClick={() => setEditing(marca)}
+                  />
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
+      {/* Portals (modals) are OUTSIDE the brand list */}
       {deleting &&
         createPortal(
           <div
@@ -245,4 +252,4 @@ export default function Marcas({ marcas, isEditMode, onDeleted, onEdited }: Marc
         )}
     </>
   );
-}
+}  

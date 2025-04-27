@@ -2,15 +2,33 @@
 
 import { useRouter } from 'next/navigation'; // Alteração aqui
 import Image from "next/image";
-
+import { login } from '@/services/api';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica de validação de login aqui
-    router.push('/dashboard/brands'); // Redireciona para a página /dashboard
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+
+
+    try {
+      const response = await login(formData);
+
+      const user = { ...response.user };
+      delete user.password;
+
+      localStorage.setItem('accessToken', response.access);
+      localStorage.setItem('refreshToken', response.refresh);
+      localStorage.setItem('user', JSON.stringify(response.user));
+
+      router.push('/dashboard/brands');
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Erro ao fazer login.");
+    }
   };
 
   return (

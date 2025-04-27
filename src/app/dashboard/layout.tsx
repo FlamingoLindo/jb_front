@@ -1,18 +1,27 @@
+'use client'
+
 import type { Metadata } from "next";
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import "../globals.css";
 
 import NaviBar from "@/Components/Navibar";
-
-export const metadata: Metadata = {
-  title: "Dashboard | JB Ferros e Aços",
-  description: "Painel de controle da loja de ferros e aços",
-};
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      router.push("/");
+    }
+  }, [router]);
+
+
   return (
     <>
       <NaviBar />
