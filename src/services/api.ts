@@ -1,28 +1,11 @@
 import axios from "axios";
 
+import { Brand, Product } from '@/interfaces';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
-export interface Brand {
-  id: number;
-  name: string;
-  logo: string;
-}
-
-export interface Product {
-  id: number;
-  code: number;
-  name: string;
-  description: string;
-  price: string;
-  original_price: string;
-  image: string;
-};
 
 const api = axios.create({ 
   baseURL: API_BASE_URL, 
-  headers: {
-    "Content-Type": "application/json"
-  },
 });
 
 api.interceptors.request.use(
