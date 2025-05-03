@@ -1,8 +1,8 @@
 'use client'
 
-import type { Metadata } from "next";
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast'
 import "../globals.css";
 
 import NaviBar from "@/Components/Navibar";
@@ -21,7 +21,6 @@ export default function DashboardLayout({
     }
   }, [router]);
 
-
   return (
     <>
       <NaviBar />
@@ -33,6 +32,17 @@ export default function DashboardLayout({
         }}
       >
         {children}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              borderRadius: '8px',
+              padding: '0.75rem 1rem',
+              fontSize: '0.9rem',
+            },
+          }}
+        />
       </div>
     </>
   );

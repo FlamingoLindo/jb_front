@@ -7,7 +7,9 @@ import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
 
 import Products from '@/Components/Products';
-import { getProductsByBrand, getBrandById, type Product, type Brand } from '@/services/api';
+import { getProductsByBrand, getBrandById } from '@/services/api';
+import type { Brand, Product } from "@/interfaces";
+
 import AddProductButton from '@/Components/AddProductButton';
 import EnableEditButton from '@/Components/EnableEditButton';
 import ReajustButton from '@/Components/ReajustButton';

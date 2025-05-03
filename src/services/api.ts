@@ -1,7 +1,7 @@
 import axios from "axios";
 //import toast from 'react-hot-toast';
 
-import { Brand, Product } from '@/interfaces';
+import { Brand, Product, User, Paginated } from '@/interfaces';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -26,7 +26,6 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    //toast.error("Ocorreu um erro!")
     console.error("API Error:", error.response || error.message);
     return Promise.reject(error);
   }
@@ -116,6 +115,25 @@ export const restorePrice = async (
 export const login = async (data: FormData) => {
   const res = await api.post("login/", data);
   return res.data;
+};
+
+export const getUsers = async (page = 1): Promise<Paginated<User>> => {
+  const response = await api.get<Paginated<User>>(`users/?page=${page}`);
+  return response.data;
+};
+
+export const updateUserStatus = async (id: number) => {
+  const response = await api.put(
+    `users/${id}/toggle-active/`,
+  );
+  return response.data;
+};
+
+export const searchUsers = async (q: string, page = 1) => {
+  const { data } = await api.get<Paginated<User>>("users/search/", {
+    params: { q, page }
+  });
+  return data;
 };
 
 export default api;

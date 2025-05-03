@@ -1,6 +1,7 @@
 'use client';
 
-import { getBrands, type Brand } from "@/services/api";
+import { getBrands } from "@/services/api";
+import type { Brand } from "@/interfaces";
 import { useState, useEffect, useCallback } from "react";
 
 import AddBrandButton from "@/Components/AddBrandButton";
