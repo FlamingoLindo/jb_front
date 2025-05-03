@@ -1,18 +1,19 @@
 'use client'
 
-import { useRouter } from 'next/navigation'; // Alteração aqui
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import { login } from '@/services/api';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     const formData = new FormData(e.target as HTMLFormElement);
-
 
     try {
       const response = await login(formData);
@@ -60,21 +61,42 @@ export default function Login() {
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           <div className="flex flex-col">
             <label htmlFor="password" className="mb-1 font-semibold text-sm">
               Senha
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                required
+                className="w-full border border-gray-300 rounded-md p-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(v => !v)}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none"
+              >
+                {showPassword
+                  ? <EyeOff size={20} />
+                  : <Eye size={20} />
+                }
+              </button>
+            </div>
           </div>
+
           <div className="flex items-center gap-2">
-            <input type="checkbox" id="rememberMe" name="rememberMe" className='cursor-pointer'/>
-            <label htmlFor="rememberMe" className='cursor-pointer'>Manter conectado</label>
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              className="cursor-pointer"
+            />
+            <label htmlFor="rememberMe" className="cursor-pointer">
+              Manter conectado
+            </label>
           </div>
           <button
             type="submit"

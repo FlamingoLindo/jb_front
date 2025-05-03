@@ -1,4 +1,5 @@
 import axios from "axios";
+//import toast from 'react-hot-toast';
 
 import { Brand, Product } from '@/interfaces';
 
@@ -25,6 +26,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    //toast.error("Ocorreu um erro!")
     console.error("API Error:", error.response || error.message);
     return Promise.reject(error);
   }
