@@ -5,15 +5,18 @@ import { Brand, Product, User, Paginated } from '@/interfaces';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const api = axios.create({ 
-  baseURL: API_BASE_URL, 
+const api = axios.create({
+  baseURL: API_BASE_URL,
 });
 
 api.interceptors.request.use(
   (config) => {
+    if (config.url?.endsWith("login/")) {
+      return config;
+    }
     const token = localStorage.getItem("accessToken");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
